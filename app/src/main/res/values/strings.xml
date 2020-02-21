@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Recolt</string>
+    <string name="annuler">Annuler</string>
+    <string name="_0_ms">0 ms</string>
+    <string name="terminer">Terminer</string>
+    <string name="smallestdisplacement">SmallestDisplacement</string>
+    <string name="ok">Ok</string>
+    <string name="interval">** interval **</string>
+</resources>

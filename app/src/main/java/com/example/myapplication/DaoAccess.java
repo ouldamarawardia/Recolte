@@ -19,8 +19,7 @@ public interface DaoAccess {
     @Query("SELECT * FROM recolts" )
     List<Recolt> loadalldatas();
 
-    @Delete
-    int deleteRacolt(Recolt donnees);
-
+@Query("DELETE FROM recolts")
+void deleteRacolt();
 
 }

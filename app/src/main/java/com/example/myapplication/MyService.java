@@ -29,33 +29,41 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
-import javax.net.ssl.SSLContext;
-
 public class MyService extends Service implements SensorEventListener {
 
-
-
     private static final String TAG = "MyActivity";
+    public static final String My_Prefs = "My_prefs";
 
     FusedLocationProviderClient fusedLocationProviderClient;
     LocationRequest locationRequest;
     LocationCallback locationCallback;
+
     Sensor accelerometer;
     SensorManager sm;
+
     boolean mark;
+    boolean firstUpdate = true;
     double x,y,z,vilocity;
     double xAccel,yAccel,zAccel;
     double xPreviousAccel,yPreviousAccel,zPreviousAccel;
-    boolean firstUpdate = true;
-    double directprec,speedprec,alt ,longi,sped,dir;
+    double accuracyDirection, accuracySpeed, latitude, longitude,speed, direction;
+
     int interval,FastestInterval,SmallestDisplacement;
-    public static final String My_Prefs = "My_prefs";
+
     MyDatabase db ;
+
+    IntentFilter intentFilter;
+
     @Override
     public void onCreate() {
         super.onCreate();
-        Toast.makeText(this, "-------------Service start ", Toast.LENGTH_SHORT).show();
-        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver,new IntentFilter("true_reg"));
+        intentFilter = new IntentFilter();
+        intentFilter.addAction("ralentisseur"); // Action1 to filter
+        intentFilter.addAction("stop"); // Action2 to filter
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, intentFilter);
+
+        Toast.makeText(this, "Service start", Toast.LENGTH_SHORT).show();
+
         db = MyDatabase.instance(this);
 
         sm = (SensorManager)getSystemService(SENSOR_SERVICE);
@@ -69,48 +77,62 @@ public class MyService extends Service implements SensorEventListener {
 
         mark=false;
 
-
         SharedPreferences preferences=getSharedPreferences(My_Prefs,MODE_PRIVATE);
-        interval=preferences.getInt("interval",100);
-        FastestInterval=preferences.getInt("FastestInterval",100);
-        SmallestDisplacement =preferences.getInt("SmallestDisplacement",100);
-
-
-
+        interval=preferences.getInt("Interval",500);
+        FastestInterval=preferences.getInt("FastestInterval",500);
+        SmallestDisplacement =preferences.getInt("SmallestDisplacement",1);
     }
-    public void onDestroy(){
 
+    public void onDestroy(){
         super.onDestroy();
     }
+
+
+
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+
+
         @Override
         public void onReceive(Context context, Intent intent) {
-            mark=true;
+
+            if (intent.getAction().equals("ralentisseur")) {
+                // message From button save 
+                mark=true;
+            } else if (intent.getAction().equals("stop")) {
+                // message from button( interval or fastestInterval or smallestDisplacement )
+                Intent i = new Intent(MyService.this,MyService.class);
+                fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+                stopService(i);
+            }
+
+
         }
     };
     private void buildLocationCallBack() {
+
         locationCallback = new LocationCallback(){
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 for(Location location:locationResult.getLocations()) {
                     Log.i(TAG,"interval ------->  "+ interval);
-                    alt = location.getLatitude();
-                    longi = location.getLongitude();
-                    sped = location.getSpeed();
-                    dir = location.getBearing();
+                    latitude = location.getLatitude();
+                    longitude = location.getLongitude();
+                    speed = location.getSpeed();
+                    direction = location.getBearing();
+
                     if (Build.VERSION.SDK_INT < 26) {
-                        speedprec = 0;
-                        directprec = 0;
+                        accuracySpeed = 0;
+                        accuracyDirection = 0;
                     }
                     else {
-                        speedprec = location.getSpeedAccuracyMetersPerSecond();
-                        directprec = location.getBearingAccuracyDegrees();
+                        accuracySpeed = location.getSpeedAccuracyMetersPerSecond();
+                        accuracyDirection = location.getBearingAccuracyDegrees();
                     }
-                    Recolt donnees = new Recolt(alt, longi, sped, speedprec, dir, directprec,vilocity ,x, y, z,mark);
+
+                    Recolt donnees = new Recolt(latitude, longitude, speed, accuracySpeed, direction, accuracyDirection,vilocity ,x, y, z,mark);
                     db.daoAccess().insertRacolt(donnees);
                     int h=db.daoAccess().loadalldatas().size()-1;
                     Log.i(TAG, ""+ db.daoAccess().loadalldatas().get(h));
-
 
                     mark=false;
                 }
@@ -134,7 +156,7 @@ public class MyService extends Service implements SensorEventListener {
         double deltaX = Math.abs(xPreviousAccel - xAccel);
         double deltaY = Math.abs(yPreviousAccel - yAccel);
         double deltaZ = Math.abs(yPreviousAccel - yAccel);
-        vilocity = Math.sqrt(Math.pow(deltaX,2)+Math.pow(deltaY,2)+Math.pow(deltaZ,2))-SensorManager.GRAVITY_EARTH;
+        vilocity = Math.sqrt(Math.pow(deltaX,2)+Math.pow(deltaY,2)+Math.pow(deltaZ,2))/SensorManager.GRAVITY_EARTH;
 
     }
 
@@ -163,6 +185,7 @@ public class MyService extends Service implements SensorEventListener {
 
 
     private void buildLocationRequest() {
+
         locationRequest = new LocationRequest();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setInterval(interval);

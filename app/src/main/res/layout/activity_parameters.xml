@@ -10,9 +10,9 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="160dp"
         android:layout_marginEnd="30dp"
-        android:layout_marginBottom="181dp"
+
         android:background="@drawable/rounded_button"
         android:gravity="center"
         android:orientation="vertical"
@@ -24,9 +24,10 @@
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:gravity="bottom"
+            android:layout_marginTop="20dp"
             android:text="@string/interval"
             android:textAlignment="center"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/common_google_signin_btn_text_dark"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -35,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:gravity="bottom"
-            android:textColor="#ffffff"
+            android:textColor="@color/common_google_signin_btn_text_dark"
             android:text="@string/_0_ms"
             android:textAlignment="center"
             android:textSize="30sp" />
@@ -44,19 +45,20 @@
             android:id="@+id/seekBar"
             android:layout_width="match_parent"
             android:layout_height="68dp"
-            android:maxHeight="3dp"
-            android:minHeight="3dp"
+            android:maxHeight="4dp"
+            android:minHeight="4dp"
             android:progressDrawable="@drawable/color_seekbar"
             android:thumbTint="@color/colorPrimary" />
 
 
         <TextView
             android:id="@+id/termine"
-            android:layout_width="80dp"
+            android:layout_width="match_parent"
             android:layout_height="40sp"
             android:gravity="center"
             android:text="@string/ok"
-            android:textColor="#FFFFFF"
+            android:layout_marginBottom="20dp"
+            android:textColor="@color/common_google_signin_btn_text_dark"
             android:textSize="18sp"
             android:textStyle="bold" />
 

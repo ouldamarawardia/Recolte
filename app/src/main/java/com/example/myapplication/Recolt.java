@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey;
 
 
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity(tableName = "recolts")
 public class Recolt implements Serializable {
@@ -47,6 +48,8 @@ public class Recolt implements Serializable {
     @ColumnInfo(name="mark")
     boolean markable;
 
+    Date created_at;
+
 
 
     public Recolt( double laltitude, double longitude, double speed, double speedAcc, double direction, double directAcc,double vilocity ,double x, double y, double z,boolean markable) {
@@ -61,6 +64,7 @@ public class Recolt implements Serializable {
         this.y = y;
         this.z = z;
         this.markable=markable;
+        created_at = new Date();
     }
 
     public double getLaltitude() {

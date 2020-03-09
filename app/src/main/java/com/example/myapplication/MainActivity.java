@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -28,6 +29,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.Date;
+import java.util.concurrent.CancellationException;
 
 import static com.example.myapplication.MyService.My_Prefs;
 
@@ -37,14 +39,18 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
     Button ralentisseur,save,interval,FastestInterval,SmallestDisplacement;
 
 
+
     TextView textView; // show progress of seek bar
     TextView termine; //ok
     TextView title; // titre de popup
     SeekBar seekBar; // seekBar for interval fastestInterval and SmallestDisplacement
-    int Min=100,Max=1000,current=100; // for seekBar min , max , acurrent valeur
-    int last1=current,last2=current,last3=current;
+    int MinDisplacement=0,MaxDisplacement=50,currentDisplacement=1; // for seekBar min , max , acurrent valeur
+    int MinInterval=100,MaxInterval=1000,currentInterval=500;
+    int MinFastestInterval=100,MaxFastestInterval=1000,currentFastestInterval=500;// for seekBar min , max , acurrent valeur
+    int last1,last2,last3;
     int choix; // 1: interval , 2: Fastest interval , 3: SmallestDisplacement
     int PERMISSION_ALL = 1;
+    boolean update=false;
     String[] PERMISSIONS = {
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -57,6 +63,11 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if(!update){
+            update=true;
+
+        }
 
         if (!hasPermissions(this, PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
@@ -71,14 +82,19 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
         FastestInterval= findViewById(R.id.FastestInterval);
         SmallestDisplacement= findViewById(R.id.SmallestDisplacement);
 
+        SharedPreferences preferences=getSharedPreferences(My_Prefs,MODE_PRIVATE);
+        last1=preferences.getInt("last1",500);
+        last2=preferences.getInt("last2",500);
+        last3 =preferences.getInt("last3",1);
+
         interval.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
                                             // code de interval
+                                            Intent i = new Intent("stop");
+                                            LocalBroadcastManager.getInstance(context).sendBroadcast((i));
                                             choix=1;
                                             initiatePopupWindow();
-
-
                                         }
                                     }
         );
@@ -86,11 +102,11 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
         FastestInterval.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                                     // code de FastestInterval
+                                            // code de FastestInterval
+                                            Intent i = new Intent("stop");
+                                            LocalBroadcastManager.getInstance(context).sendBroadcast((i));
                                                      choix=2;
                                                      initiatePopupWindow();
-
-
                                         }
                                     }
         );
@@ -99,6 +115,8 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
                                                @Override
                                                public void onClick(View v) {
                                                    // code de SmallestDisplacement
+                                                   Intent i = new Intent("stop");
+                                                   LocalBroadcastManager.getInstance(context).sendBroadcast((i));
                                                    choix=3;
                                                    initiatePopupWindow();
                                                }
@@ -108,8 +126,9 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                                                    saveData();
 
+                                                    saveData();
+                                                    recolt.daoAccess().deleteRacolt();
                                                     Toast toast=Toast.makeText(context,"saved!",Toast.LENGTH_SHORT);
                                                     toast.show();
             }
@@ -117,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
         ralentisseur.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                                    Intent i = new Intent("true_reg");
+                                                    Intent i = new Intent("ralentisseur");
                                                     LocalBroadcastManager.getInstance(context).sendBroadcast((i));
                                                     Toast toast=Toast.makeText(context,"done!",Toast.LENGTH_SHORT);
                                                     toast.show();
@@ -131,44 +150,53 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
 
 
  //pop up window "parameters" interval fastestInterval smallestDisplacement
-
     private void initiatePopupWindow() {
         try {
-            LayoutInflater inflater = (LayoutInflater) MainActivity.this
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View layout = inflater.inflate(R.layout.activity_parameters, (ViewGroup) findViewById(R.id.layout));
 
-            final PopupWindow pwindo = new PopupWindow(layout, 900, LinearLayout.LayoutParams.WRAP_CONTENT, true);
-
+            final PopupWindow pwindo = new PopupWindow(layout, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
 
             pwindo.showAtLocation(layout, Gravity.CENTER, 0, 0);
-
+;
             seekBar = layout.findViewById(R.id.seekBar); // make seekBar object
-            seekBar.setMax(Max-Min);
 
             textView =  layout.findViewById(R.id.textView);
 
             title= layout.findViewById(R.id.title);
 
+            termine = layout.findViewById(R.id.termine);
+
             switch (choix){
                 case 1:
 
-                    seekBar.setProgress(last1-Min);
+                    seekBar.setMax(MaxInterval-MinInterval);
+                    seekBar.setProgress(last1-MinInterval);
                     textView.setText(""+last1);
                     break;
 
                 case 2:
+
+                    seekBar.setMax(MaxFastestInterval-MinFastestInterval);
                     title.setText("** FastestInterval **");
-                    seekBar.setProgress(last2-Min);
+                    seekBar.setProgress(last2-MinFastestInterval);
                     textView.setText(""+last2);
                     break;
 
                 case 3:
+                    seekBar.setMax(MaxDisplacement-MinDisplacement);
                     title.setText("** SmallestDisplacement **");
-                    seekBar.setProgress(last3-Min);
+                    seekBar.setProgress(last3-MinDisplacement);
                     textView.setText(""+last3);
                     break;
             }
+
+            pwindo.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    Intent intent = new Intent(MainActivity.this, MyService.class);
+                    startService(intent);                }
+            });
 
 
             seekBar.setOnSeekBarChangeListener(this);
@@ -176,7 +204,6 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
 
 
 
-            termine = layout.findViewById(R.id.termine);
             termine.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -184,18 +211,32 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
                     final SharedPreferences.Editor editor=getSharedPreferences(My_Prefs,MODE_PRIVATE).edit();
                     switch (choix){
                         case 1:
-                            editor.putInt("interval",current);
-                            last1=current;
+                            editor.putInt("Interval",currentInterval);
+
+                            last1=currentInterval;
+
+                            editor.putInt("last1",last1);
+
+
                             break;
 
                         case 2:
-                            editor.putInt("FastestInterval",current);
-                            last2=current;
+                            editor.putInt("FastestInterval",currentFastestInterval);
+
+                            last2=currentFastestInterval;
+
+                            editor.putInt("last2",last2);
+
+
                             break;
 
                         case 3:
-                            editor.putInt("SmallestDisplacement",current);
-                            last3=current;
+                            editor.putInt("SmallestDisplacement",currentDisplacement);
+
+                            last3=currentDisplacement;
+
+                            editor.putInt("last3",last3);
+
                             break;
 
                     }
@@ -222,9 +263,23 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-        current=progress+Min;
-        textView.setText(""+current);
+        switch (choix){
 
+            case 1:
+            currentInterval=progress+MinInterval;
+            textView.setText(""+currentInterval);
+                break;
+
+            case 2:
+                currentFastestInterval=progress+MinInterval;
+                textView.setText(""+currentFastestInterval);
+                break;
+
+            case 3:
+                currentDisplacement=progress+MinDisplacement;
+                textView.setText(""+currentDisplacement);
+                break;
+        }
 
     }
 
@@ -282,6 +337,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
             file=creatFile();
         }
         try {
+
             file.createNewFile();
             CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
             Cursor curCSV = recolt.query("select * from recolts",null);
@@ -292,6 +348,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
                     arrStr[i] = curCSV.getString(i);
                 csvWrite.writeNext(arrStr);
             }
+
             csvWrite.close();
             curCSV.close();
         } catch (Exception sqlEx) {

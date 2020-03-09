@@ -6,4 +6,8 @@
     <string name="smallestdisplacement">SmallestDisplacement</string>
     <string name="ok">Ok</string>
     <string name="interval">** interval **</string>
+    <string name="fastestinterval">FastestInterval</string>
+    <string name="smallest_displacement">Smallest Displacement</string>
+    <string name="intervale">interval</string>
+    <string name="vide" />
 </resources>

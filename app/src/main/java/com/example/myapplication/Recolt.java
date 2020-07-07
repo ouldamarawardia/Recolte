@@ -132,7 +132,7 @@ public class Recolt implements Serializable {
 
 
     public String toString(){
-        return "Altitude : "+getLaltitude()+"  Longitude : "+getLongitude()+" Direction : "+getDirection()+" Direction Accuracy : "+getDirectAcc()+"  Speed : "+getSpeed()+" Speed Accuracy : "+getSpeedAcc()+" Vilocity : "+getVilocity()+"  X : "+getX()+"  Y : "+getY()+" Z : "+getZ()+" Mark : "+markable;
+        return "Altitude : "+getLaltitude()+"  Longitude : "+getLongitude()+" Direction : "+getDirection()+" Direction Accuracy : "+getDirectAcc()+"  Speed : "+getSpeed()+" Speed Accuracy : "+getSpeedAcc()+" Vilocity : "+getVilocity()+"  X : "+getX()+"  Y : "+getY()+" Z : "+getZ()+" Mark : "+markable +"created_at"+created_at;
     }
 }
 

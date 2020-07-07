@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 
-@Database(entities = {Recolt.class}, version = 9,exportSchema = false)
+@Database(entities = {Recolt.class}, version = 10,exportSchema = false)
 @TypeConverters(Converters.class)
 abstract class MyDatabase extends RoomDatabase {
     private static MyDatabase database;

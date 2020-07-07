@@ -1,12 +1,10 @@
 <component name="libraryTable">
   <library name="Gradle: com.github.rtugeek:colorseekbar:1.7.2@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/7f1cc0d557640eae296b1da3d6322624/jetified-colorseekbar-1.7.2/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/7f1cc0d557640eae296b1da3d6322624/jetified-colorseekbar-1.7.2/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/2b8c6a3fd11a6fa46d94d9011053fcb5/jetified-colorseekbar-1.7.2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/2b8c6a3fd11a6fa46d94d9011053fcb5/jetified-colorseekbar-1.7.2/res" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.rtugeek/colorseekbar/1.7.2/3ff938d62944e8f672aa93a76601ba25b7aa9085/colorseekbar-1.7.2-sources.jar!/" />
-    </SOURCES>
+    <SOURCES />
   </library>
 </component>

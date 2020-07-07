@@ -35,8 +35,8 @@
                           <map>
                             <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="00ff9b" />
-                            <entry key="outputName" value="ic_export_file_clicked" />
-                            <entry key="sourceFile" value="C:\Users\ASUS\Desktop\PFE\icon\export-file.svg" />
+                            <entry key="outputName" value="ic_icon" />
+                            <entry key="sourceFile" value="C:\Users\ASUS\Desktop\icon2.svg" />
                           </map>
                         </option>
                       </PersistentState>

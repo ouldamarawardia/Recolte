@@ -1,13 +1,12 @@
 <resources>
     <string name="app_name">Recolt</string>
-    <string name="annuler">Annuler</string>
     <string name="_0_ms">0 ms</string>
-    <string name="terminer">Terminer</string>
-    <string name="smallestdisplacement">SmallestDisplacement</string>
-    <string name="ok">Ok</string>
-    <string name="interval">** interval **</string>
+    <string name="interval">interval</string>
     <string name="fastestinterval">FastestInterval</string>
     <string name="smallest_displacement">Smallest Displacement</string>
-    <string name="intervale">interval</string>
-    <string name="vide" />
+    <string name="cancel" >cancel</string>
+    <string name="ok">Ok</string>
+    <string name="Settings">Settings</string>
+    <string name="notice">click here if you find bump</string>
+    <string name="CSV">CSV</string>
 </resources>

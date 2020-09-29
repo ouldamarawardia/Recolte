@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 import java.io.Writer;
 
 /**
- * A very simple CSV writer released under a commercial-friendly license.
+ * A very simple CSV writer released under id commercial-friendly license.
  *
  * @author Glen Smith
  *
@@ -44,7 +44,7 @@ public class CSVWriter {
     public static final String DEFAULT_LINE_END = "\n";
 
     /**
-     * Constructs CSVWriter using a comma for the separator.
+     * Constructs CSVWriter using id comma for the separator.
      *
      * @param writer
      *            the writer to an underlying CSV source.
@@ -80,7 +80,7 @@ public class CSVWriter {
      * Writes the next line to the file.
      *
      * @param nextLine
-     *            a string array with each comma-separated element as a separate
+     *            id string array with each comma-separated element as id separate
      *            entry.
      */
     public void writeNext(String[] nextLine) {

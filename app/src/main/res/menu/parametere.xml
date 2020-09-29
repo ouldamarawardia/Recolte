@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/Settings"
+
+        android:title="@string/Settings"
+        app:showAsAction = "never" >
+
+        <menu>
+
+    <item android:id="@+id/interval"
+        android:icon="@drawable/costum_interval"
+        android:title="@string/interval"
+        app:showAsAction = "never">
+
+    </item>
+
+
+    <item android:id="@+id/FastestInterval"
+         android:icon="@drawable/costum_fastest_interval"
+         android:title="@string/fastestinterval"
+         app:showAsAction = "never" />
+    <item android:id="@+id/SmallestDisplacement"
+            android:icon="@drawable/costum_distance"
+            android:title="@string/smallest_displacement"
+            app:showAsAction = "never" />
+    </menu>
+
+    </item>
+</menu>

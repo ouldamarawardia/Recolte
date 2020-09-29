@@ -4,4 +4,9 @@
     <color name="colorPrimaryDark">#005500</color>
     <color name="colorAccent">#008500</color>
     <color name="btColor">#A9A9A9</color>
+    <color name="white">#FFFFFF</color>
+    <color name="setting">#4BB543</color>
+    <color name="cansel">#434343</color>
+    <color name="textColor">#212121</color>
+
 </resources>

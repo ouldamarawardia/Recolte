@@ -11,12 +11,10 @@ import java.util.Date;
 @Entity(tableName = "recolts")
 public class Recolt implements Serializable {
 
-    public boolean isMarkable() {
-        return markable;
-    }
+
 
     @PrimaryKey(autoGenerate = true)
-  int a;
+    int id;
     @ColumnInfo(name = "laltitude")
     double laltitude;
 
@@ -45,14 +43,14 @@ public class Recolt implements Serializable {
     @ColumnInfo(name = "z")
     double z;
 
-    @ColumnInfo(name="mark")
-    boolean markable;
+    @ColumnInfo(name="bump")
+    boolean bump;
 
     Date created_at;
 
 
 
-    public Recolt( double laltitude, double longitude, double speed, double speedAcc, double direction, double directAcc,double vilocity ,double x, double y, double z,boolean markable) {
+    public Recolt( double laltitude, double longitude, double speed, double speedAcc, double direction, double directAcc,double vilocity ,double x, double y, double z,boolean bump) {
         this.laltitude = laltitude;
         this.longitude = longitude;
         this.speed = speed;
@@ -63,7 +61,7 @@ public class Recolt implements Serializable {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.markable=markable;
+        this.bump = bump;
         created_at = new Date();
     }
 
@@ -101,8 +99,11 @@ public class Recolt implements Serializable {
         return z;
     }
 
-    public void setMarkable(boolean markable) {
-        this.markable = markable;
+    public boolean isBump() {
+        return bump;
+    }
+    public void setBump(boolean bump) {
+        this.bump = bump;
     }
 
     public void setLaltitude(double laltitude) {this.laltitude = laltitude; }
@@ -132,7 +133,7 @@ public class Recolt implements Serializable {
 
 
     public String toString(){
-        return "Altitude : "+getLaltitude()+"  Longitude : "+getLongitude()+" Direction : "+getDirection()+" Direction Accuracy : "+getDirectAcc()+"  Speed : "+getSpeed()+" Speed Accuracy : "+getSpeedAcc()+" Vilocity : "+getVilocity()+"  X : "+getX()+"  Y : "+getY()+" Z : "+getZ()+" Mark : "+markable +"created_at"+created_at;
+        return "Altitude : "+getLaltitude()+"  Longitude : "+getLongitude()+" Direction : "+getDirection()+" Direction Accuracy : "+getDirectAcc()+"  Speed : "+getSpeed()+" Speed Accuracy : "+getSpeedAcc()+" Vilocity : "+getVilocity()+"  X : "+getX()+"  Y : "+getY()+" Z : "+getZ()+" Mark : "+ bump +"created_at"+created_at;
     }
 }
 

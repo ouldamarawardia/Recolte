@@ -41,7 +41,7 @@ public class MyService extends Service implements SensorEventListener {
     Sensor accelerometer;
     SensorManager sm;
 
-    boolean mark;
+    boolean bump;
     boolean firstUpdate = true;
     double x,y,z,vilocity;
     double xAccel,yAccel,zAccel;
@@ -58,7 +58,7 @@ public class MyService extends Service implements SensorEventListener {
     public void onCreate() {
         super.onCreate();
         intentFilter = new IntentFilter();
-        intentFilter.addAction("ralentisseur"); // Action1 to filter
+        intentFilter.addAction("bump"); // Action1 to filter
         intentFilter.addAction("stop"); // Action2 to filter
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, intentFilter);
 
@@ -75,7 +75,7 @@ public class MyService extends Service implements SensorEventListener {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         fusedLocationProviderClient.requestLocationUpdates(locationRequest,locationCallback, Looper.myLooper());
 
-        mark=false;
+        bump =false;
 
         SharedPreferences preferences=getSharedPreferences(My_Prefs,MODE_PRIVATE);
         interval=preferences.getInt("Interval",500);
@@ -95,11 +95,12 @@ public class MyService extends Service implements SensorEventListener {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            if (intent.getAction().equals("ralentisseur")) {
+            if (intent.getAction().equals("bump")) {
                 // message From button save 
-                mark=true;
+                bump =true;
             } else if (intent.getAction().equals("stop")) {
                 // message from button( interval or fastestInterval or smallestDisplacement )
+                Toast.makeText(context, "Service stop", Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(MyService.this,MyService.class);
                 fusedLocationProviderClient.removeLocationUpdates(locationCallback);
                 stopService(i);
@@ -129,12 +130,12 @@ public class MyService extends Service implements SensorEventListener {
                         accuracyDirection = location.getBearingAccuracyDegrees();
                     }
 
-                    Recolt donnees = new Recolt(latitude, longitude, speed, accuracySpeed, direction, accuracyDirection,vilocity ,x, y, z,mark);
+                    Recolt donnees = new Recolt(latitude, longitude, speed, accuracySpeed, direction, accuracyDirection,vilocity ,x, y, z, bump);
                     db.daoAccess().insertRacolt(donnees);
                     int h=db.daoAccess().loadalldatas().size()-1;
                     Log.i(TAG, ""+ db.daoAccess().loadalldatas().get(h));
 
-                    mark=false;
+                    bump =false;
                 }
             }
         };
